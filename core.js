@@ -1,47 +1,6 @@
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
 
-// =============== Cart page ===============
-function handleAddProducts() {
-    const addBtns = $$('.cartBtn')
-    addBtns.forEach(addBtn => {
-        addBtn.addEventListener('click', toast)
-        addBtn.addEventListener('click', handleAddCart)
-    })
-}
-
-function handleAddCart(e) {
-    if(e) {
-        const index = e.target.dataset.index
-        dispatch('addCart', index)
-    }
-}
-
-// Xử lí nút tăng giảm sản phẩm
-function toast() {
-    const main = document.querySelector('#toast')
-    const toastDiv = document.createElement('div')
-    toastDiv.classList.add('toast')
-    toastDiv.innerHTML = `
-        <div class="toast__icon">
-            <i class="fa-solid fa-circle-check"></i>
-        </div>
-        <div class="toast__body">
-            <h3 class="toast__title">Success</h3>
-            <p class="toast__msg">Sản phẩm  vừa được thêm vào giỏ hàng</p>
-        </div>
-        <div class="toast__close">
-            <i class="fa-solid fa-xmark"></i>
-        </div>
-    `
-    if(main) {
-        main.appendChild(toastDiv)
-    }
-    setTimeout(function() {
-        main.removeChild(toastDiv)
-    }, 4000)
-}
-
 function handleRemoveCartItemPage() {
     const removeBtns = $$('.remove-item')
     removeBtns.forEach(btn => btn.addEventListener('click', handleRemoveCartItem))
@@ -78,7 +37,6 @@ export function createStore(reducer) {
         if (window.initializeEventListeners) {
             window.initializeEventListeners()
         }
-        handleAddProducts()
         handleRemoveCartItemPage()
         initializeCouponEvents()
     }

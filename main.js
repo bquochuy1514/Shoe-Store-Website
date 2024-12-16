@@ -1,4 +1,3 @@
-
 import { attach } from "./store.js"
 import latestWrapper from "./component/latestProduct/latestWrapper.js"
 
@@ -16,18 +15,13 @@ window.initializeEventListeners = initializeEventListeners
 let removeIndex = null;
 let editIndex = null;
 function initializeEventListeners() {
-    
     handleAddModal()
-
     handleRemoveModal()
-
     handleEditModal()
-    
     handleDetailsModal()
-
     handleImportExcel()
-
     handleExportExcel()
+    handleShowToast()
 }
 
 // Gọi lại hàm này sau mỗi lần render
@@ -115,7 +109,7 @@ function handleRemoveModal() {
 }
 
 function handleEditModal() {
-    //Nút huỷ modal chỉnh sửa
+    //Nút huỷ modal chỉnh s���a
    const closeEditBtn = $('.modalEditInner__btn')
    closeEditBtn.addEventListener('click', () => {
         $('.modalEdit').classList.add('hide')
@@ -294,20 +288,23 @@ function handleExportExcel() {
 function handleShowToast() {
     const addBtns = $$('.cartBtn')
     addBtns.forEach(addBtn => {
-        addBtn.addEventListener('click', toast)
-        addBtn.addEventListener('click', handleAddCart)
+        // Kiểm tra xem button đã có event listener chưa
+        if (!addBtn.hasListener) {
+            // Chỉ thêm một event listener xử lý cả hai chức năng
+            addBtn.addEventListener('click', function(e) {
+                const index = e.target.dataset.index
+                window.dispatch('addCart', index) // Chỉ dispatch một lần
+                toast() // Hiển thị toast
+            })
+            addBtn.hasListener = true // Đánh dấu đã thêm listener
+        }
     })
 }
 
-function handleAddCart(e) {
-    const index = e.target.dataset.index
-    dispatch('addCart', index)
-}
-
-handleShowToast()
-
 function toast() {
     const main = document.querySelector('#toast')
+    if (!main) return
+
     const toastDiv = document.createElement('div')
     toastDiv.classList.add('toast')
     toastDiv.innerHTML = `
@@ -316,15 +313,14 @@ function toast() {
         </div>
         <div class="toast__body">
             <h3 class="toast__title">Success</h3>
-            <p class="toast__msg">Sản phẩm  vừa được thêm vào giỏ hàng</p>
+            <p class="toast__msg">Sản phẩm vừa được thêm vào giỏ hàng</p>
         </div>
         <div class="toast__close">
             <i class="fa-solid fa-xmark"></i>
         </div>
     `
-    if(main) {
-        main.appendChild(toastDiv)
-    }
+    main.appendChild(toastDiv)
+    
     setTimeout(function() {
         main.removeChild(toastDiv)
     }, 4000)
