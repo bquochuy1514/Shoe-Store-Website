@@ -11,6 +11,8 @@ const init = {
 
 console.log('init', init)
 
+localStorage.removeItem('PRODUCTS')
+
 localStorage.setItem('PRODUCTS', JSON.stringify(
     [
         {
