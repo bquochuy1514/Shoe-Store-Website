@@ -23,6 +23,8 @@ function cartSummary({cart, discount}) {
                 <input type="text" placeholder="Enter promo code" class="promo-input">
                 <button id="applyCoupon" class="btn apply-promo">Apply</button>
             </div>
+
+            <div class = "showCoupon"> Coupon code: <span style ="color: red"> Sale10, Sale20, Sale50 </span> </div>
             
             <!-- Hiển thị chi tiết giảm giá -->
             ${discount.code ? `
